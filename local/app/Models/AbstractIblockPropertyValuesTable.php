@@ -60,7 +60,7 @@ abstract class AbstractIblockPropertyValuesTable extends DataManager
         $multipleValuesTableClass = static::getMultipleValuesTableClass();
         static::initMultipleValuesTableClass();
 
-        if ($cache->initCache(3600, md5($cacheDir), $cacheDir)) {
+        if ($cache->initCache(3600, md5($cacheDir), $cacheDir) && 1==2) {
             $map = $cache->getVars();
 
         } else {
@@ -75,6 +75,7 @@ abstract class AbstractIblockPropertyValuesTable extends DataManager
 
             foreach (static::getProperties() as $property) {
                 if ($property['MULTIPLE'] === 'Y') {
+
                     $map[$property['CODE']] = new ExpressionField(
                         $property['CODE'],
                         sprintf('(select group_concat(`VALUE` SEPARATOR "\0") as VALUE from %s as m where m.IBLOCK_ELEMENT_ID = %s and m.IBLOCK_PROPERTY_ID = %d)',
@@ -85,6 +86,8 @@ abstract class AbstractIblockPropertyValuesTable extends DataManager
                         ['IBLOCK_ELEMENT_ID'],
                         ['fetch_data_modification' => [static::class, 'getMultipleFieldValueModifier']]
                     );
+
+
 
                     if ($property['USER_TYPE'] === 'EList') {
                         $map[$property['CODE'].'_ELEMENT_NAME'] = new ExpressionField(
